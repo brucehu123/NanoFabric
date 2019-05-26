@@ -3,9 +3,15 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
+    <Compile Remove="Logging\**" />
+    <EmbeddedResource Remove="Logging\**" />
+    <None Remove="Logging\**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Logging\" />
+    <PackageReference Include="DnsClient" Version="1.1.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Nito.AsyncEx.Context" Version="5.0.0-pre-05" />
+    <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
   </ItemGroup>
 </Project>

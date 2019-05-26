@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NanoFabric.AspNetCore;
 using NanoFabric.IdentityServer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using SkyWalking.AspNetCore;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+
 
 namespace SampleService.IdentityServer
 {
@@ -47,7 +50,8 @@ namespace SampleService.IdentityServer
                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
 
-               });
+               })  ;
+            services.AddNanoFabricConsul(Configuration);
 
             services.AddIdentityServer()
                 .AddSigningCredential(cert)
@@ -63,6 +67,13 @@ namespace SampleService.IdentityServer
                     corsBuilder.AllowCredentials();
                 });
             });
+
+            //var collectorUrl = Configuration.GetValue<string>("Skywalking:CollectorUrl");
+            //services.AddSkyWalking(option =>
+            //{
+            //    option.DirectServers = collectorUrl;
+            //    option.ApplicationCode = "SampleService_Idserver";
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,6 +93,7 @@ namespace SampleService.IdentityServer
             }
             app.UseCors("CorsPolicy");
             app.UseIdentityServer();
+            app.UseConsulRegisterService(Configuration);
 
             app.UseStaticFiles();
 
